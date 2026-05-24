@@ -93,6 +93,7 @@
         /* Базовый стиль кнопок */
         .link-btn {
             display: block;
+            width: 100%;
             background-color: #ff007f;
             color: #ffffff;
             text-decoration: none;
@@ -108,8 +109,10 @@
         /* Стиль для кнопки-текста (Press & Hold в Инсте) */
         .hold-text-btn {
             display: block;
+            width: 100%;
             background-color: #ff007f;
             color: #ffffff;
+            text-decoration: none;
             text-align: center;
             padding: 16px;
             border-radius: 12px;
@@ -147,7 +150,7 @@
     </div>
 
     <div id="instagram-view" class="links-container">
-        <a href="https://onlyfans.com/jerry_hitfree" class="hold-text-btn" id="fake-btn">Press & Hold</a>
+        <a href="" class="hold-text-btn" id="fake-btn">Press & Hold</a>
     </div>
 
     <div id="normal-view" class="links-container">
@@ -156,29 +159,37 @@
     </div>
 
     <script>
-        // Функция проверки: открыт ли сайт внутри Instagram
+        // Записываем текущий URL сайта на GitHub
+        const currentUrl = window.location.href;
+        
+        // Автоматически подставляем адрес нашего сайта в кнопку Press & Hold
+        document.getElementById('fake-btn').href = currentUrl;
+
         function checkUserAgent() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // Проверяем, открыт ли сайт внутри приложения Instagram
             const isInstagram = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
             
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
 
             if (isInstagram) {
-                // Если мы в Инстаграме — показываем режим "Press & Hold"
+                // Если пользователь пришел ИЗ ИНСТАГРАМА — включаем заглушку Press & Hold
+                instagramView.style.style.display = 'block';
                 instagramView.style.display = 'block';
                 normalView.style.display = 'none';
             } else {
-                // Если в обычном браузере — показываем обычные ссылки
+                // Если пользователь открыл сайт в обычном браузере (Safari / Chrome) — показываем обе кнопки
                 instagramView.style.display = 'none';
                 normalView.style.display = 'block';
             }
         }
 
-        // Запускаем проверку при загрузке страницы
+        // Запуск проверки при загрузке страницы
         window.addEventListener('DOMContentLoaded', checkUserAgent);
 
-        // Полностью глушим обычный клик по кнопке Press & Hold в Инстаграме
+        // Полностью блокируем обычный короткий клик по кнопке Press & Hold внутри Instagram
         document.getElementById('fake-btn').addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
