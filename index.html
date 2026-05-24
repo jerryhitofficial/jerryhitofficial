@@ -90,21 +90,19 @@
             padding: 0 20px;
         }
 
-        /* --- АНИМАЦИЯ ПЛАВНОГО ПЕРЕЛИВА ГРАДИЕНТА --- */
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- НОВАЯ СВЕРХЛЕГКАЯ АНИМАЦИЯ ДЛЯ ИНСТАГРАМА --- */
+        @keyframes pulseGlow {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
         }
         
         /* ДВЕ ОСНОВНЫЕ КНОПКИ */
         .link-btn {
             display: block;
             width: 100%;
-            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
-            background-size: 600% 600%;
-            animation: gradientFlow 6s ease infinite;
-            
+            position: relative;
+            background: linear-gradient(135deg, rgba(23, 31, 58, 1) 0%, rgba(68, 107, 149, 1) 100%);
             color: #ffffff;
             text-decoration: none;
             text-align: center;
@@ -115,9 +113,20 @@
             cursor: pointer;
             border: none;
             outline: none;
-            box-shadow: none !important;
+            overflow: hidden;
+            z-index: 1;
             -webkit-appearance: none;
             transition: transform 0.1s ease;
+        }
+
+        /* Второй слой градиента для перелива */
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 78, 172, 1) 0%, rgba(23, 31, 58, 1) 100%);
+            z-index: -1;
+            animation: pulseGlow 4s ease-in-out infinite;
         }
 
         .link-btn:active {
@@ -129,14 +138,12 @@
             margin-top: 14px;
         }
 
-        /* КНОПКА PRESS & HOLD: Исправлены стили для запуска анимации на ссылке */
+        /* ИСПРАВЛЕННАЯ КНОПКА PRESS & HOLD (Анимация через слои) */
         .hold-text-btn {
-            display: block !important; /* Жестко фиксируем блочный тип */
+            display: block !important;
             width: 100%;
-            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1)) !important;
-            background-size: 600% 600% !important;
-            animation: gradientFlow 6s ease infinite !important;
-            
+            position: relative;
+            background: linear-gradient(135deg, rgba(23, 31, 58, 1) 0%, rgba(68, 107, 149, 1) 100%);
             color: #ffffff;
             text-decoration: none;
             text-align: center;
@@ -145,14 +152,24 @@
             font-size: 16px;
             font-weight: 600;
             border: none;
-            box-shadow: none !important;
+            overflow: hidden;
+            z-index: 1;
             -webkit-appearance: none;
-            overflow: hidden; /* Защита от вылезания фона */
             
-            /* Разрешаем выделение текста операционной системой телефона */
+            /* Разрешаем выделение текста */
             -webkit-user-select: text !important;
             user-select: text !important;
             -webkit-touch-callout: default !important;
+        }
+
+        /* Переливающийся слой для кнопки Инстаграма, который сработает на любом железе */
+        .hold-text-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 78, 172, 1) 0%, rgba(23, 31, 58, 1) 100%);
+            z-index: -1;
+            animation: pulseGlow 4s ease-in-out infinite;
         }
 
         /* По умолчанию скрываем блоки */
@@ -284,7 +301,6 @@
     </div>
 
     <script>
-        // Автоматический умный URL для любого домена
         const currentDomain = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname;
         
         document.getElementById('fake-btn').href = currentDomain + '#open';
