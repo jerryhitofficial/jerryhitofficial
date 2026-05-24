@@ -90,6 +90,319 @@
             padding: 0 20px;
         }
 
+        /* --- ТОТ САМЫЙ ПЕРВЫЙ ВАРИАНТ АНИМАЦИИ ПЕРЕЛИВА --- */
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* ДВЕ ОСНОВНЫЕ КНОПКИ */
+        .link-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
+            background-size: 600% 600%;
+            animation: gradientFlow 6s ease infinite;
+            
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            box-shadow: none !important;
+            -webkit-appearance: none;
+            transition: transform 0.1s ease;
+        }
+
+        .link-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Надежный отступ между кнопками */
+        .space-between {
+            margin-top: 14px;
+        }
+
+        /* КНОПКА PRESS & HOLD */
+        .hold-text-btn {
+            display: block !important;
+            width: 100%;
+            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1)) !important;
+            background-size: 600% 600% !important;
+            animation: gradientFlow 6s ease infinite !important;
+            
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            box-shadow: none !important;
+            -webkit-appearance: none;
+            overflow: hidden;
+            
+            /* Разрешаем выделение текста операционной системой телефона */
+            -webkit-user-select: text !important;
+            user-select: text !important;
+            -webkit-touch-callout: default !important;
+        }
+
+        /* По умолчанию скрываем блоки */
+        .hidden-block {
+            display: none !important;
+        }
+
+        /* --- СТИЛИ ДЛЯ ОКНА ПРЕДУПРЕЖДЕНИЯ 18+ --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Когда модалка активна */
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: transparent;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+            color: #ffffff;
+            position: relative;
+        }
+
+        /* Кнопка крестика для закрытия в углу */
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 10px;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* Иконка перечеркнутого глаза */
+        .modal-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.4;
+            margin-bottom: 25px;
+        }
+
+        /* Белая кнопка Continue */
+        .modal-btn-continue {
+            display: block;
+            width: 100%;
+            max-width: 160px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bg">
+        <div class="avatar-container">
+            <img src="avatar.jpg" alt="Jerryhit">
+        </div>
+    </div>
+
+    <div class="profile-info">
+        <h1 class="username">Jerryhit <span class="verified-badge">✓</span></h1>
+        <p class="subtitle">Model & Content Creator</p>
+    </div>
+
+    <div id="instagram-view" class="links-container hidden-block">
+        <a href="" class="hold-text-btn" id="fake-btn">Press & Hold</a>
+    </div>
+
+    <div id="normal-view" class="links-container">
+        <button class="link-btn" id="of-trigger-btn">Exclusive Content</button>
+        <a href="https://t.me/jerryhitofficial" target="_blank" class="link-btn space-between">Telegram channel</a>
+    </div>
+
+    <div class="modal-overlay" id="modal-18">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close-btn">&times;</button>
+            <div class="modal-icon">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+            </div>
+            <h2 class="modal-title">18+ Content Warning</h2>
+            <p class="modal-text">This link may contain graphic or adult content.</p>
+            <a href="https://onlyfans.com/jerry_hitfree" target="_blank" class="modal-btn-continue" id="continue-link">Continue</a>
+        </div>
+    </div>
+
+    <script>
+        const currentDomain = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname;
+        
+        document.getElementById('fake-btn').href = currentDomain + '#open';
+
+        function checkView() {
+            const instagramView = document.getElementById('instagram-view');
+            const normalView = document.getElementById('normal-view');
+
+            if (window.location.hash === '#open') {
+                instagramView.classList.add('hidden-block');
+                normalView.classList.remove('hidden-block');
+                return;
+            }
+
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+
+            if (isInstagramApp) {
+                instagramView.classList.remove('hidden-block');
+                normalView.classList.add('hidden-block');
+            } else {
+                instagramView.classList.add('hidden-block');
+                normalView.classList.remove('hidden-block');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', checkView);
+        window.addEventListener('hashchange', checkView);
+
+        document.getElementById('fake-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        // Логика модального окна 18+
+        const modal = document.getElementById('modal-18');
+        const triggerBtn = document.getElementById('of-trigger-btn');
+        const closeBtn = document.getElementById('modal-close-btn');
+        const continueLink = document.getElementById('continue-link');
+
+        triggerBtn.addEventListener('click', function() {
+            modal.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('active');
+        });
+
+        continueLink.addEventListener('click', function() {
+            setTimeout(() => {
+                modal.classList.remove('active');
+            }, 500);
+        });
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>            height: 130px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 5px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Текстовый блок черного цвета */
+        .profile-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        .username {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        /* Галочка с градиентом */
+        .verified-badge {
+            background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
+            color: #ffffff;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #666666;
+            font-weight: 400;
+        }
+
+        /* Контейнер кнопок */
+        .links-container {
+            width: 100%;
+            max-width: 340px;
+            padding: 0 20px;
+        }
+
         /* --- ОРИГИНАЛЬНАЯ АНИМАЦИЯ ПЕРЕЛИВА --- */
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
