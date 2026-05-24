@@ -90,20 +90,20 @@
             padding: 0 20px;
         }
 
-        /* --- ТОТ САМЫЙ ПЕРВЫЙ ВАРИАНТ АНИМАЦИИ ПЕРЕЛИВА --- */
+        /* --- ОРИГИНАЛЬНАЯ АНИМАЦИЯ ПЕРЕЛИВА --- */
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
         
-        /* ДВЕ ОСНОВНЫЕ КНОПКИ */
-        .link-btn {
-            display: block;
+        /* ОБЩИЙ СТИЛЬ ДЛЯ ВСЕХ КНОПОК НА САЙТЕ */
+        .link-btn, .hold-text-btn {
+            display: block !important;
             width: 100%;
-            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
-            background-size: 600% 600%;
-            animation: gradientFlow 6s ease infinite;
+            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1)) !important;
+            background-size: 600% 600% !important;
+            animation: gradientFlow 6s ease infinite !important;
             
             color: #ffffff;
             text-decoration: none;
@@ -120,7 +120,7 @@
             transition: transform 0.1s ease;
         }
 
-        .link-btn:active {
+        .link-btn:active, .hold-text-btn:active {
             transform: scale(0.98);
         }
 
@@ -129,27 +129,12 @@
             margin-top: 14px;
         }
 
-        /* КНОПКА PRESS & HOLD */
-        .hold-text-btn {
-            display: block !important;
-            width: 100%;
-            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1)) !important;
-            background-size: 600% 600% !important;
-            animation: gradientFlow 6s ease infinite !important;
-            
-            color: #ffffff;
+        /* Ссылка-обертка для инстаграм экрана */
+        .hold-wrapper {
             text-decoration: none;
-            text-align: center;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            box-shadow: none !important;
-            -webkit-appearance: none;
-            overflow: hidden;
-            
-            /* Разрешаем выделение текста операционной системой телефона */
+            display: block;
+            width: 100%;
+            /* Позволяем копировать саму ссылку внутри обертки */
             -webkit-user-select: text !important;
             user-select: text !important;
             -webkit-touch-callout: default !important;
@@ -260,7 +245,9 @@
     </div>
 
     <div id="instagram-view" class="links-container hidden-block">
-        <a href="" class="hold-text-btn" id="fake-btn">Press & Hold</a>
+        <a href="" class="hold-wrapper" id="fake-btn">
+            <button class="hold-text-btn">Press & Hold</button>
+        </a>
     </div>
 
     <div id="normal-view" class="links-container">
