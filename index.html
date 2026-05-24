@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jerryhit</title>
+    
+    <meta property="og:title" content="Jerryhit">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    
     <style>
         /* Обнуление стилей и шрифт */
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -155,7 +160,7 @@
             -webkit-touch-callout: default !important;
         }
 
-        /* По умолчанию скрываем блоки */
+        /* По умолчанию скрываем blocks */
         .hidden-block {
             display: none !important;
         }
@@ -293,11 +298,10 @@
             const normalView = document.getElementById('normal-view');
             const subtitle = document.getElementById('profile-subtitle');
 
-            // Если открыта вторая (основная) страница
             if (window.location.hash === '#open') {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
-                subtitle.classList.remove('hidden-block'); // Показываем надпись
+                subtitle.classList.remove('hidden-block');
                 return;
             }
 
@@ -305,15 +309,13 @@
             const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
 
             if (isInstagramApp) {
-                // Если зашли из Инстаграма (первая страница)
                 instagramView.classList.remove('hidden-block');
                 normalView.classList.add('hidden-block');
-                subtitle.classList.add('hidden-block'); // Прячем надпись
+                subtitle.classList.add('hidden-block');
             } else {
-                // Если зашли по прямой ссылке из обычного браузера (сразу вторая страница)
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
-                subtitle.classList.remove('hidden-block'); // Показываем надпись
+                subtitle.classList.remove('hidden-block');
             }
         }
 
