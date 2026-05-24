@@ -80,14 +80,17 @@
             font-weight: 400;
         }
 
-        /* Контейнер кнопки */
+        /* Контейнер кнопок */
         .links-container {
             width: 100%;
             max-width: 340px;
             padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         
-        /* Кнопка "Press & Hold" */
+        /* Базовый стиль кнопок */
         .link-btn {
             display: block;
             background-color: #ff007f;
@@ -99,11 +102,34 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+        }
+
+        /* Стиль для кнопки-текста (Press & Hold в Инсте) */
+        .hold-text-btn {
+            display: block;
+            background-color: #ff007f;
+            color: #ffffff;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
             
-            /* Важные свойства для корректного вызова меню на iOS/Android */
-            -webkit-touch-callout: default !important;
+            /* Разрешаем выделение текста операционной системой телефона */
             -webkit-user-select: text !important;
             user-select: text !important;
+            -webkit-touch-callout: default !important;
+        }
+
+        .link-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Изначально скрываем оба режима, их включит JavaScript */
+        #instagram-view, #normal-view {
+            display: none;
+            width: 100%;
         }
     </style>
 </head>
@@ -120,27 +146,40 @@
         <p class="subtitle">Model & Content Creator</p>
     </div>
 
-    <div class="links-container">
-        <a href="https://jerryhitofficial.github.io/jerryhit/" id="hold-btn" class="link-btn">Press & Hold</a>
+    <div id="instagram-view" class="links-container">
+        <a href="https://onlyfans.com/jerry_hitfree" class="hold-text-btn" id="fake-btn">Press & Hold</a>
+    </div>
+
+    <div id="normal-view" class="links-container">
+        <a href="https://onlyfans.com/jerry_hitfree" target="_blank" class="link-btn">Exclusive Content</a>
+        <a href="https://t.me/jerryhitofficial" target="_blank" class="link-btn">Telegram channel</a>
     </div>
 
     <script>
-        const button = document.getElementById('hold-btn');
+        // Функция проверки: открыт ли сайт внутри Instagram
+        function checkUserAgent() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isInstagram = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+            
+            const instagramView = document.getElementById('instagram-view');
+            const normalView = document.getElementById('normal-view');
 
-        // Жесткое глушение вообще всех мобильных тапов (нажатий пальцем)
-        button.addEventListener('touchstart', function(e) {
-            // Позволяем работать только долгому нажатию, не сбрасываем базовое поведение системы
-        }, {passive: true});
-
-        button.addEventListener('touchend', function(e) {
-            // Если это был быстрый одиночный тап — полностью блокируем его последствия
-            if (e.cancelable) {
-                e.preventDefault();
+            if (isInstagram) {
+                // Если мы в Инстаграме — показываем режим "Press & Hold"
+                instagramView.style.display = 'block';
+                normalView.style.display = 'none';
+            } else {
+                // Если в обычном браузере — показываем обычные ссылки
+                instagramView.style.display = 'none';
+                normalView.style.display = 'block';
             }
-        });
+        }
 
-        // Блокировка для кликов мышкой (десктоп)
-        button.addEventListener('click', function(e) {
+        // Запускаем проверку при загрузке страницы
+        window.addEventListener('DOMContentLoaded', checkUserAgent);
+
+        // Полностью глушим обычный клик по кнопке Press & Hold в Инстаграме
+        document.getElementById('fake-btn').addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             return false;
