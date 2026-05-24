@@ -18,7 +18,7 @@
             min-height: 100vh;
         }
 
-        /* НОВЫЙ СТИЛЬ: Розовая шапка теперь градиент, как на фото */
+        /* Шапка с градиентом из фото */
         .header-bg {
             background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
             width: 100%;
@@ -27,7 +27,7 @@
             margin-bottom: 75px;
         }
 
-        /* Контейнер для аватара — остается с белой рамкой */
+        /* Контейнер для аватара с белой рамкой */
         .avatar-container {
             position: absolute;
             bottom: -65px;
@@ -47,7 +47,7 @@
             border-radius: 50%;
         }
 
-        /* Текстовый блок — цвет текста черный */
+        /* Текстовый блок черного цвета */
         .profile-info {
             text-align: center;
             margin-bottom: 30px;
@@ -64,7 +64,7 @@
             gap: 6px;
         }
         
-        /* Галочка становится градиентной, как кнопки */
+        /* Галочка с градиентом */
         .verified-badge {
             background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
             color: #ffffff;
@@ -89,12 +89,23 @@
             max-width: 340px;
             padding: 0 20px;
         }
+
+        /* --- АНИМАЦИЯ ПЛАВНОГО ПЕРЕЛИВА ГРАДИЕНТА --- */
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         
-        /* Базовый стиль кнопок — НОВЫЙ СТИЛЬ: Розовый заменен на градиент, как на фото */
+        /* ДВЕ ОСНОВНЫЕ КНОПКИ: Включена анимация перелива */
         .link-btn {
             display: block;
             width: 100%;
-            background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
+            /* Расширяем фон для возможности его перемещения во время анимации */
+            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
+            background-size: 600% 600%;
+            animation: gradientFlow 6s ease infinite;
+            
             color: #ffffff;
             text-decoration: none;
             text-align: center;
@@ -107,6 +118,12 @@
             outline: none;
             box-shadow: none !important;
             -webkit-appearance: none;
+            transition: transform 0.1s ease;
+        }
+
+        /* Микро-эффект нажатия на кнопку для мобилок */
+        .link-btn:active {
+            transform: scale(0.98);
         }
 
         /* Надежный отступ между кнопками */
@@ -114,11 +131,14 @@
             margin-top: 14px;
         }
 
-        /* Стиль для кнопки-текста (Press & Hold в Инсте) — тоже градиент */
+        /* КНОПКА PRESS & HOLD: Тоже переливается */
         .hold-text-btn {
             display: block;
             width: 100%;
-            background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
+            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
+            background-size: 600% 600%;
+            animation: gradientFlow 6s ease infinite;
+            
             color: #ffffff;
             text-decoration: none;
             text-align: center;
@@ -128,6 +148,7 @@
             font-weight: 600;
             border: none;
             box-shadow: none !important;
+            -webkit-appearance: none;
             
             /* Разрешаем выделение текста операционной системой телефона */
             -webkit-user-select: text !important;
@@ -140,7 +161,7 @@
             display: none !important;
         }
 
-        /* --- СТИЛИ ДЛЯ ОКНА ПРЕДУПРЕЖДЕНИЯ 18+ (Остаются прежними) --- */
+        /* --- СТИЛИ ДЛЯ ОКНА ПРЕДУПРЕЖДЕНИЯ 18+ --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -264,24 +285,21 @@
     </div>
 
     <script>
-        // АВТОМАТИЧЕСКИЙ УМНЫЙ URL ДЛЯ ЛЮБОГО ДОМЕНА
+        // Автоматический умный URL для любого домена
         const currentDomain = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname;
         
-        // Вшиваем в кнопку Press & Hold ссылку с меткой #open
         document.getElementById('fake-btn').href = currentDomain + '#open';
 
         function checkView() {
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
 
-            // 1. Если в ссылке есть #open — жестко показываем ДВЕ кнопки
             if (window.location.hash === '#open') {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
                 return;
             }
 
-            // 2. Проверяем, заперты ли мы прямо сейчас внутри приложения Instagram
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
 
@@ -297,14 +315,13 @@
         window.addEventListener('DOMContentLoaded', checkView);
         window.addEventListener('hashchange', checkView);
 
-        // Блокируем стандартный короткий клик по кнопке удержания
         document.getElementById('fake-btn').addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             return false;
         });
 
-        // ЛОГИКА ДЛЯ МОДАЛЬНОГО ОКНА 18+
+        // Логика модального окна 18+
         const modal = document.getElementById('modal-18');
         const triggerBtn = document.getElementById('of-trigger-btn');
         const closeBtn = document.getElementById('modal-close-btn');
