@@ -87,7 +87,7 @@
             padding: 0 20px;
         }
         
-        /* Базовый стиль кнопок — ТЕНИ УБРАНЫ (box-shadow: none, border: none) */
+        /* Базовый стиль кнопок — БЕЗ ТЕНЕЙ */
         .link-btn {
             display: block;
             width: 100%;
@@ -261,11 +261,12 @@
     </div>
 
     <script>
-        // Чистый URL сайта без хэшей
-        const baseUrl = window.location.href.split('#')[0].split('?')[0];
+        // АВТОМАТИЧЕСКИЙ УМНЫЙ URL ДЛЯ ЛЮБОГО ДОМЕНА
+        // Скрипт берет текущий протокол и доменное имя, отбрасывая любые хвосты
+        const currentDomain = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname;
         
         // Вшиваем в кнопку Press & Hold ссылку с меткой #open
-        document.getElementById('fake-btn').href = baseUrl + '#open';
+        document.getElementById('fake-btn').href = currentDomain + '#open';
 
         function checkView() {
             const instagramView = document.getElementById('instagram-view');
