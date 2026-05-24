@@ -90,7 +90,7 @@
             padding: 0 20px;
         }
 
-        /* --- ТОТ САМЫЙ ПЕРВЫЙ ВАРИАНТ АНИМАЦИИ ПЕРЕЛИВА --- */
+        /* --- АНИМАЦИИ ПЕРЕЛИВА --- */
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -149,7 +149,6 @@
             -webkit-appearance: none;
             overflow: hidden;
             
-            /* Разрешаем выделение текста операционной системой телефона */
             -webkit-user-select: text !important;
             user-select: text !important;
             -webkit-touch-callout: default !important;
@@ -279,7 +278,7 @@
             </div>
             <h2 class="modal-title">18+ Content Warning</h2>
             <p class="modal-text">This link may contain graphic or adult content.</p>
-            <a href="https://onlyfans.com/jerry_hitfree" target="_blank" class="modal-btn-continue" id="continue-link">Continue</a>
+            <a href="#" target="_blank" class="modal-btn-continue" id="continue-link">Continue</a>
         </div>
     </div>
 
@@ -306,11 +305,11 @@
             if (isInstagramApp) {
                 instagramView.classList.remove('hidden-block');
                 normalView.classList.add('hidden-block');
-                subtitle.classList.add('hidden-block');    // Скрываем подзаголовок на первом экране в Instagram
+                subtitle.classList.add('hidden-block');    // Скрываем подзаголовок на первом экране
             } else {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
-                subtitle.classList.remove('hidden-block'); // Если открыли сразу в обычном браузере — показываем
+                subtitle.classList.remove('hidden-block'); // Показываем в обычном браузере
             }
         }
 
@@ -323,29 +322,37 @@
             return false;
         });
 
-        // Логика модального окна 18+
+        // Логика модального окна и безопасной расшифровки ссылки
         const modal = document.getElementById('modal-18');
         const triggerBtn = document.getElementById('of-trigger-btn');
         const closeBtn = document.getElementById('modal-close-btn');
         const continueLink = document.getElementById('continue-link');
 
+        // "
+        const secretData = "aHR0cHM6Ly9vbmx5ZmFucy5jb20vamVycnlfaGl0ZnJlZQ==";
+
         triggerBtn.addEventListener('click', function() {
+            // Генерируем реальную ссылку только в момент открытия модалки человеком
+            continueLink.href = atob(secretData);
             modal.classList.add('active');
         });
 
         closeBtn.addEventListener('click', function() {
             modal.classList.remove('active');
+            continueLink.href = "#"; // Стираем ссылку обратно при закрытии
         });
 
         continueLink.addEventListener('click', function() {
             setTimeout(() => {
                 modal.classList.remove('active');
+                continueLink.href = "#"; // Стираем ссылку после клика
             }, 500);
         });
 
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.classList.remove('active');
+                continueLink.href = "#"; // Стираем ссылку
             }
         });
     </script>
