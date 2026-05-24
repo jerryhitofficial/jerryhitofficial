@@ -100,10 +100,10 @@
             font-weight: 600;
             cursor: pointer;
             
-            /* Разрешаем долгое нажатие и появление системного меню */
-            -webkit-touch-callout: default !important; 
-            user-select: none;
-            -webkit-user-select: none;
+            /* Важные свойства для корректного вызова меню на iOS/Android */
+            -webkit-touch-callout: default !important;
+            -webkit-user-select: text !important;
+            user-select: text !important;
         }
     </style>
 </head>
@@ -127,18 +127,23 @@
     <script>
         const button = document.getElementById('hold-btn');
 
-        // Полностью блокируем обычный короткий клик (тап)
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            return false;
-        });
+        // Жесткое глушение вообще всех мобильных тапов (нажатий пальцем)
+        button.addEventListener('touchstart', function(e) {
+            // Позволяем работать только долгому нажатию, не сбрасываем базовое поведение системы
+        }, {passive: true});
 
-        // Блокируем стандартный переход при отпускании пальца на мобильных
         button.addEventListener('touchend', function(e) {
-            // Если это был просто короткий тап, ничего не делаем
+            // Если это был быстрый одиночный тап — полностью блокируем его последствия
             if (e.cancelable) {
                 e.preventDefault();
             }
+        });
+
+        // Блокировка для кликов мышкой (десктоп)
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
         });
     </script>
 
