@@ -87,7 +87,7 @@
             padding: 0 20px;
         }
         
-        /* Базовый стиль кнопок */
+        /* Базовый стиль кнопок — ТЕНИ УБРАНЫ (box-shadow: none, border: none) */
         .link-btn {
             display: block;
             width: 100%;
@@ -100,14 +100,18 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            border: none;
+            outline: none;
+            box-shadow: none !important;
+            -webkit-appearance: none;
         }
 
-        /* Отступ между кнопками */
+        /* Надежный отступ между кнопками */
         .space-between {
             margin-top: 14px;
         }
 
-        /* Стиль для кнопки-текста (Press & Hold) */
+        /* Стиль для кнопки-текста (Press & Hold в Инсте) */
         .hold-text-btn {
             display: block;
             width: 100%;
@@ -119,11 +123,16 @@
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
+            border: none;
+            box-shadow: none !important;
+            
+            /* Разрешаем выделение текста операционной системой телефона */
             -webkit-user-select: text !important;
             user-select: text !important;
             -webkit-touch-callout: default !important;
         }
 
+        /* По умолчанию скрываем блоки */
         .hidden-block {
             display: none !important;
         }
@@ -135,8 +144,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Темный полупрозрачный фон */
-            backdrop-filter: blur(8px); /* Размытие заднего плана как на скрине */
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(8px); 
             -webkit-backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -211,7 +220,6 @@
             font-weight: 600;
             cursor: pointer;
             border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -253,19 +261,24 @@
     </div>
 
     <script>
+        // Чистый URL сайта без хэшей
         const baseUrl = window.location.href.split('#')[0].split('?')[0];
+        
+        // Вшиваем в кнопку Press & Hold ссылку с меткой #open
         document.getElementById('fake-btn').href = baseUrl + '#open';
 
         function checkView() {
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
 
+            // 1. Если в ссылке есть #open — жестко показываем ДВЕ кнопки
             if (window.location.hash === '#open') {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
                 return;
             }
 
+            // 2. Проверяем, заперты ли мы прямо сейчас внутри приложения Instagram
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
 
@@ -281,6 +294,7 @@
         window.addEventListener('DOMContentLoaded', checkView);
         window.addEventListener('hashchange', checkView);
 
+        // Блокируем стандартный короткий клик по кнопке удержания
         document.getElementById('fake-btn').addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -293,24 +307,20 @@
         const closeBtn = document.getElementById('modal-close-btn');
         const continueLink = document.getElementById('continue-link');
 
-        // Открываем окно при клике на Exclusive Content
         triggerBtn.addEventListener('click', function() {
             modal.classList.add('active');
         });
 
-        // Закрываем окно при клике на крестик
         closeBtn.addEventListener('click', function() {
             modal.classList.remove('active');
         });
 
-        // Закрываем окно после того, как пользователь нажал Continue
         continueLink.addEventListener('click', function() {
             setTimeout(() => {
                 modal.classList.remove('active');
-            }, 500); // Небольшая задержка перед закрытием для плавности
+            }, 500);
         });
 
-        // Закрываем окно, если пользователь кликнул на темную область вокруг текста
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.classList.remove('active');
