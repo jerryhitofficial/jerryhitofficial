@@ -288,44 +288,11 @@
         document.getElementById('fake-btn').href = currentDomain + '#open';
 
         function checkView() {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            
-            // 1. АБСОЛЮТНЫЙ ТРЮК ДЛЯ ТЕЛЕГРАМА (iOS и Android)
-            const isTelegram = (ua.indexOf('Telegram') > -1);
-            
-            // Запускаем триггер выброса, только если в URL еще нет хэша #open
-            if (isTelegram && window.location.hash.indexOf('#open') === -1) {
-                if (/android/i.test(ua)) {
-                    window.location.href = 'intent://' + window.location.hostname + window.location.pathname + '#open#Intent;scheme=https;end';
-                    return;
-                }
-                
-                // Для iOS генерируем искусственный blob со сторонним MIME-типом (application/octet-stream).
-                // Браузер Telegram пасует перед неизвестным типом файла и аварийно выбивает сессию в Safari.
-                const targetUrl = currentDomain + '#open';
-                const blob = new Blob([`<script>window.location.href="${targetUrl}";<\/script>`], {type: 'application/octet-stream'});
-                const blobUrl = URL.createObjectURL(blob);
-                
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                // Даем системное имя, имитируя скачивание конфигурации, что активирует внешний запуск
-                link.download = "redirect.html"; 
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                // Страховочный вариант: если blob не выбил сразу, переключаем хэш внутри
-                setTimeout(() => {
-                    window.location.hash = '#open';
-                }, 300);
-                return;
-            }
-
-            // 2. СТАНДАРТНАЯ СХЕМА ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
             const subtitle = document.getElementById('profile-subtitle');
 
+            // Если открыто с хэшем #open (после зажатия кнопки или через прямую ссылку из ТГ)
             if (window.location.hash.indexOf('#open') > -1) {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
@@ -333,6 +300,7 @@
                 return;
             }
 
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
 
             if (isInstagramApp) {
@@ -340,6 +308,7 @@
                 normalView.classList.add('hidden-block');
                 subtitle.classList.add('hidden-block');
             } else {
+                // Во всех остальных браузерах (включая встроенный ТГ, если зашли без бота-редиректа) сразу показываем две кнопки
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
                 subtitle.classList.remove('hidden-block');
