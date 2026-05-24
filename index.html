@@ -256,7 +256,7 @@
 
     <div class="profile-info">
         <h1 class="username">Jerryhit <span class="verified-badge">✓</span></h1>
-        <p class="subtitle">Model & Content Creator</p>
+        <p class="subtitle hidden-block" id="profile-subtitle">Model & Content Creator</p>
     </div>
 
     <div id="instagram-view" class="links-container hidden-block">
@@ -291,10 +291,12 @@
         function checkView() {
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
+            const subtitle = document.getElementById('profile-subtitle');
 
             if (window.location.hash === '#open') {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
+                subtitle.classList.remove('hidden-block'); // Показываем подзаголовок на втором экране
                 return;
             }
 
@@ -304,9 +306,11 @@
             if (isInstagramApp) {
                 instagramView.classList.remove('hidden-block');
                 normalView.classList.add('hidden-block');
+                subtitle.classList.add('hidden-block');    // Скрываем подзаголовок на первом экране в Instagram
             } else {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
+                subtitle.classList.remove('hidden-block'); // Если открыли сразу в обычном браузере — показываем
             }
         }
 
