@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jerryhit | Links</title>
+    <title>Jerryhit</title>
     <style>
-        /* Обнуление стилей и шрифт */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* Фон сайта остается белым */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;
@@ -18,7 +16,6 @@
             min-height: 100vh;
         }
 
-        /* Шапка с градиентом из фото */
         .header-bg {
             background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
             width: 100%;
@@ -27,7 +24,6 @@
             margin-bottom: 75px;
         }
 
-        /* Контейнер для аватара с белой рамкой */
         .avatar-container {
             position: absolute;
             bottom: -65px;
@@ -47,7 +43,6 @@
             border-radius: 50%;
         }
 
-        /* Текстовый блок черного цвета */
         .profile-info {
             text-align: center;
             margin-bottom: 30px;
@@ -64,7 +59,6 @@
             gap: 6px;
         }
         
-        /* Галочка с градиентом */
         .verified-badge {
             background: linear-gradient(180deg, rgba(23, 31, 58, 1) 0%, rgba(139, 78, 172, 1) 40%, rgba(139, 78, 172, 1) 60%, rgba(68, 107, 149, 1) 100%);
             color: #ffffff;
@@ -83,28 +77,24 @@
             font-weight: 400;
         }
 
-        /* Контейнер кнопок */
         .links-container {
             width: 100%;
             max-width: 340px;
             padding: 0 20px;
         }
 
-        /* --- АНИМАЦИИ ПЕРЕЛИВА --- */
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
         
-        /* ДВЕ ОСНОВНЫЕ КНОПКИ */
         .link-btn {
             display: block;
             width: 100%;
             background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
             background-size: 600% 600%;
             animation: gradientFlow 6s ease infinite;
-            
             color: #ffffff;
             text-decoration: none;
             text-align: center;
@@ -124,19 +114,16 @@
             transform: scale(0.98);
         }
 
-        /* Надежный отступ между кнопками */
         .space-between {
             margin-top: 14px;
         }
 
-        /* КНОПКА PRESS & HOLD */
         .hold-text-btn {
             display: block !important;
             width: 100%;
             background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1)) !important;
             background-size: 600% 600% !important;
             animation: gradientFlow 6s ease infinite !important;
-            
             color: #ffffff;
             text-decoration: none;
             text-align: center;
@@ -148,18 +135,15 @@
             box-shadow: none !important;
             -webkit-appearance: none;
             overflow: hidden;
-            
             -webkit-user-select: text !important;
             user-select: text !important;
             -webkit-touch-callout: default !important;
         }
 
-        /* По умолчанию скрываем блоки */
         .hidden-block {
             display: none !important;
         }
 
-        /* --- СТИЛИ ДЛЯ ОКНА ПРЕДУПРЕЖДЕНИЯ 18+ --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -178,7 +162,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Когда модалка активна */
         .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
@@ -194,7 +177,6 @@
             position: relative;
         }
 
-        /* Кнопка крестика для закрытия в углу */
         .modal-close {
             position: absolute;
             top: -40px;
@@ -206,7 +188,6 @@
             border: none;
         }
 
-        /* Иконка перечеркнутого глаза */
         .modal-icon {
             font-size: 40px;
             margin-bottom: 15px;
@@ -226,7 +207,6 @@
             margin-bottom: 25px;
         }
 
-        /* Белая кнопка Continue */
         .modal-btn-continue {
             display: block;
             width: 100%;
@@ -263,7 +243,7 @@
     </div>
 
     <div id="normal-view" class="links-container">
-        <button class="link-btn" id="of-trigger-btn">Exclusive Content</button>
+        <button class="link-btn" id="of-trigger-btn">Premium</button>
         <a href="https://t.me/jerryhitofficial" target="_blank" class="link-btn space-between">Telegram channel</a>
     </div>
 
@@ -276,8 +256,8 @@
                     <line x1="1" y1="1" x2="23" y2="23"></line>
                 </svg>
             </div>
-            <h2 class="modal-title">18+ Content Warning</h2>
-            <p class="modal-text">This link may contain graphic or adult content.</p>
+            <h2 class="modal-title">Welcome to my space</h2>
+            <p class="modal-text">Click the button below to complete registration.</p>
             <a href="#" target="_blank" class="modal-btn-continue" id="continue-link">Continue</a>
         </div>
     </div>
@@ -292,7 +272,6 @@
             const normalView = document.getElementById('normal-view');
             const subtitle = document.getElementById('profile-subtitle');
 
-            // Если открыто с хэшем #open (после зажатия кнопки или через прямую ссылку из ТГ)
             if (window.location.hash.indexOf('#open') > -1) {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
@@ -308,7 +287,6 @@
                 normalView.classList.add('hidden-block');
                 subtitle.classList.add('hidden-block');
             } else {
-                // Во всех остальных браузерах (включая встроенный ТГ, если зашли без бота-редиректа) сразу показываем две кнопки
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
                 subtitle.classList.remove('hidden-block');
@@ -324,7 +302,6 @@
             return false;
         });
 
-        // Логика модального окна 18+ и безопасной расшифровки ссылки
         const modal = document.getElementById('modal-18');
         const triggerBtn = document.getElementById('of-trigger-btn');
         const closeBtn = document.getElementById('modal-close-btn');
