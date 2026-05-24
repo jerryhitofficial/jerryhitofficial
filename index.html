@@ -97,11 +97,10 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* ДВЕ ОСНОВНЫЕ КНОПКИ: Включена анимация перелива */
+        /* ДВЕ ОСНОВНЫЕ КНОПКИ */
         .link-btn {
             display: block;
             width: 100%;
-            /* Расширяем фон для возможности его перемещения во время анимации */
             background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
             background-size: 600% 600%;
             animation: gradientFlow 6s ease infinite;
@@ -121,7 +120,6 @@
             transition: transform 0.1s ease;
         }
 
-        /* Микро-эффект нажатия на кнопку для мобилок */
         .link-btn:active {
             transform: scale(0.98);
         }
@@ -131,13 +129,13 @@
             margin-top: 14px;
         }
 
-        /* КНОПКА PRESS & HOLD: Тоже переливается */
+        /* КНОПКА PRESS & HOLD: Исправлены стили для запуска анимации на ссылке */
         .hold-text-btn {
-            display: block;
+            display: block !important; /* Жестко фиксируем блочный тип */
             width: 100%;
-            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1));
-            background-size: 600% 600%;
-            animation: gradientFlow 6s ease infinite;
+            background: linear-gradient(270deg, rgba(23, 31, 58, 1), rgba(139, 78, 172, 1), rgba(68, 107, 149, 1), rgba(23, 31, 58, 1)) !important;
+            background-size: 600% 600% !important;
+            animation: gradientFlow 6s ease infinite !important;
             
             color: #ffffff;
             text-decoration: none;
@@ -149,6 +147,7 @@
             border: none;
             box-shadow: none !important;
             -webkit-appearance: none;
+            overflow: hidden; /* Защита от вылезания фона */
             
             /* Разрешаем выделение текста операционной системой телефона */
             -webkit-user-select: text !important;
