@@ -288,28 +288,52 @@
         document.getElementById('fake-btn').href = currentDomain + '#open';
 
         function checkView() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // 1. ПРОВЕРКА НА ТЕЛЕГРАМ
+            const isTelegram = (ua.indexOf('Telegram') > -1);
+            if (isTelegram) {
+                // Трюк для Android: открываем в дефолтном внешнем браузере
+                if (/android/i.test(ua)) {
+                    window.location.href = 'intent://' + window.location.hostname + window.location.pathname + '#open#Intent;scheme=https;end';
+                    return;
+                }
+                // Трюк для iOS (Telegram): симулируем скачивание, ломая внутренний браузер, что заставляет его открыть Safari
+                if (/iPhone|iPad|iPod/i.test(ua)) {
+                    const a = document.createElement('a');
+                    a.href = currentDomain + '#open';
+                    a.setAttribute('download', '');
+                    a.click();
+                    
+                    // Запасной редирект на версию с кнопками, если Safari перехватил сессию
+                    setTimeout(() => {
+                        window.location.hash = '#open';
+                    }, 500);
+                }
+            }
+
+            // 2. СТАНДАРТНАЯ СХЕМА ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
             const subtitle = document.getElementById('profile-subtitle');
 
-            if (window.location.hash === '#open') {
+            if (window.location.hash.indexOf('#open') > -1) {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
-                subtitle.classList.remove('hidden-block'); // Показываем подзаголовок на втором экране
+                subtitle.classList.remove('hidden-block');
                 return;
             }
 
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
 
             if (isInstagramApp) {
                 instagramView.classList.remove('hidden-block');
                 normalView.classList.add('hidden-block');
-                subtitle.classList.add('hidden-block');    // Скрываем подзаголовок на первом экране
+                subtitle.classList.add('hidden-block');
             } else {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
-                subtitle.classList.remove('hidden-block'); // Показываем в обычном браузере
+                subtitle.classList.remove('hidden-block');
             }
         }
 
@@ -322,37 +346,35 @@
             return false;
         });
 
-        // Логика модального окна и безопасной расшифровки ссылки
+        // Логика модального окна 18+ и безопасной расшифровки ссылки
         const modal = document.getElementById('modal-18');
         const triggerBtn = document.getElementById('of-trigger-btn');
         const closeBtn = document.getElementById('modal-close-btn');
         const continueLink = document.getElementById('continue-link');
 
-        // "
         const secretData = "aHR0cHM6Ly9vbmx5ZmFucy5jb20vamVycnlfaGl0ZnJlZQ==";
 
         triggerBtn.addEventListener('click', function() {
-            // Генерируем реальную ссылку только в момент открытия модалки человеком
             continueLink.href = atob(secretData);
             modal.classList.add('active');
         });
 
         closeBtn.addEventListener('click', function() {
             modal.classList.remove('active');
-            continueLink.href = "#"; // Стираем ссылку обратно при закрытии
+            continueLink.href = "#";
         });
 
         continueLink.addEventListener('click', function() {
             setTimeout(() => {
                 modal.classList.remove('active');
-                continueLink.href = "#"; // Стираем ссылку после клика
+                continueLink.href = "#";
             }, 500);
         });
 
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.classList.remove('active');
-                continueLink.href = "#"; // Стираем ссылку
+                continueLink.href = "#";
             }
         });
     </script>
