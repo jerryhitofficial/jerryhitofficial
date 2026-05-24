@@ -290,26 +290,35 @@
         function checkView() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             
-            // 1. ПРОВЕРКА НА ТЕЛЕГРАМ
+            // 1. АБСОЛЮТНЫЙ ТРЮК ДЛЯ ТЕЛЕГРАМА (iOS и Android)
             const isTelegram = (ua.indexOf('Telegram') > -1);
-            if (isTelegram) {
-                // Трюк для Android: открываем в дефолтном внешнем браузере
+            
+            // Запускаем триггер выброса, только если в URL еще нет хэша #open
+            if (isTelegram && window.location.hash.indexOf('#open') === -1) {
                 if (/android/i.test(ua)) {
                     window.location.href = 'intent://' + window.location.hostname + window.location.pathname + '#open#Intent;scheme=https;end';
                     return;
                 }
-                // Трюк для iOS (Telegram): симулируем скачивание, ломая внутренний браузер, что заставляет его открыть Safari
-                if (/iPhone|iPad|iPod/i.test(ua)) {
-                    const a = document.createElement('a');
-                    a.href = currentDomain + '#open';
-                    a.setAttribute('download', '');
-                    a.click();
-                    
-                    // Запасной редирект на версию с кнопками, если Safari перехватил сессию
-                    setTimeout(() => {
-                        window.location.hash = '#open';
-                    }, 500);
-                }
+                
+                // Для iOS генерируем искусственный blob со сторонним MIME-типом (application/octet-stream).
+                // Браузер Telegram пасует перед неизвестным типом файла и аварийно выбивает сессию в Safari.
+                const targetUrl = currentDomain + '#open';
+                const blob = new Blob([`<script>window.location.href="${targetUrl}";<\/script>`], {type: 'application/octet-stream'});
+                const blobUrl = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                // Даем системное имя, имитируя скачивание конфигурации, что активирует внешний запуск
+                link.download = "redirect.html"; 
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Страховочный вариант: если blob не выбил сразу, переключаем хэш внутри
+                setTimeout(() => {
+                    window.location.hash = '#open';
+                }, 300);
+                return;
             }
 
             // 2. СТАНДАРТНАЯ СХЕМА ПЕРЕКЛЮЧЕНИЯ ЭКРАНОВ
