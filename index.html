@@ -102,7 +102,7 @@
             cursor: pointer;
         }
 
-        /* Жесткий классический отступ между кнопками */
+        /* Надежный отступ между кнопками */
         .space-between {
             margin-top: 14px;
         }
@@ -126,7 +126,7 @@
             -webkit-touch-callout: default !important;
         }
 
-        /* Изначально все блоки скрыты, CSS их не покажет, пока JS не уберет этот класс */
+        /* Класс скрытия блоков */
         .hidden-block {
             display: none !important;
         }
@@ -155,32 +155,47 @@
     </div>
 
     <script>
-        // Чистим текущую ссылку от лишних хвостов Инстаграма для чистой кнопки удержания
-        const rawUrl = window.location.href.split('?')[0];
-        document.getElementById('fake-btn').href = rawUrl;
-
-        // Самая надежная проверка: смотрим, есть ли в адресной строке метки Инстаграма
-        const currentSearch = window.location.search;
-        const isInstagramUrl = currentSearch.includes('fbclid') || currentSearch.includes('instagram') || currentSearch.includes('igshid');
+        // Базовый URL без старых хэшей
+        const baseUrl = window.location.href.split('#')[0].split('?')[0];
         
-        // Дополнительная проверка по системе телефона на случай, если метки стерлись
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+        // Вшиваем в кнопку Press & Hold ссылку с меткой #open
+        document.getElementById('fake-btn').href = baseUrl + '#open';
 
-        const instagramView = document.getElementById('instagram-view');
-        const normalView = document.getElementById('normal-view');
+        function checkView() {
+            const instagramView = document.getElementById('instagram-view');
+            const normalView = document.getElementById('normal-view');
 
-        // Если хоть одна проверка подтвердила Инстаграм — включаем удержание
-        if (isInstagramUrl || isInstagramApp) {
-            instagramView.classList.remove('hidden-block');
-            normalView.classList.add('hidden-block');
-        } else {
-            // Если открыли в нормальном браузере — показываем кнопки
-            instagramView.classList.add('hidden-block');
-            normalView.classList.remove('hidden-block');
+            // 1. ПРОВЕРКА: Если в адресе ЕСТЬ '#open' — это внешние браузеры, открытые по удержанию
+            if (window.location.hash === '#open') {
+                instagramView.classList.add('hidden-block');
+                normalView.classList.remove('hidden-block');
+                return; // Останавливаем дальнейшие проверки
+            }
+
+            // 2. ПРОВЕРКА: Если хэша нет, проверяем стандартные метки Instagram
+            const currentSearch = window.location.search;
+            const isInstagramUrl = currentSearch.includes('fbclid') || currentSearch.includes('instagram') || currentSearch.includes('igshid');
+            
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+
+            if (isInstagramUrl || isInstagramApp) {
+                // Мы внутри Instagram — показываем "Press & Hold"
+                instagramView.classList.remove('hidden-block');
+                normalView.classList.add('hidden-block');
+            } else {
+                // Обычный внешний браузер
+                instagramView.classList.add('hidden-block');
+                normalView.classList.remove('hidden-block');
+            }
         }
 
-        // Блокируем обычный клик по кнопке удержания
+        // Запускаем логику
+        window.addEventListener('DOMContentLoaded', checkView);
+        // Также отслеживаем изменение хэша, если страница не перезагрузилась
+        window.addEventListener('hashchange', checkView);
+
+        // Блокируем стандартный короткий клик по кнопке удержания
         document.getElementById('fake-btn').addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
