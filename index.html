@@ -126,7 +126,7 @@
             -webkit-touch-callout: default !important;
         }
 
-        /* Класс скрытия блоков */
+        /* По умолчанию скрываем блок Инстаграма */
         .hidden-block {
             display: none !important;
         }
@@ -149,13 +149,13 @@
         <a href="" class="hold-text-btn" id="fake-btn">Press & Hold</a>
     </div>
 
-    <div id="normal-view" class="links-container hidden-block">
+    <div id="normal-view" class="links-container">
         <a href="https://onlyfans.com/jerry_hitfree" target="_blank" class="link-btn">Exclusive Content</a>
         <a href="https://t.me/jerryhitofficial" target="_blank" class="link-btn space-between">Telegram channel</a>
     </div>
 
     <script>
-        // Базовый URL без старых хэшей
+        // Чистый URL сайта без хэшей
         const baseUrl = window.location.href.split('#')[0].split('?')[0];
         
         // Вшиваем в кнопку Press & Hold ссылку с меткой #open
@@ -165,34 +165,30 @@
             const instagramView = document.getElementById('instagram-view');
             const normalView = document.getElementById('normal-view');
 
-            // 1. ПРОВЕРКА: Если в адресе ЕСТЬ '#open' — это внешние браузеры, открытые по удержанию
+            // 1. Если в ссылке есть #open — жестко показываем ДВЕ кнопки и выходим
             if (window.location.hash === '#open') {
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
-                return; // Останавливаем дальнейшие проверки
+                return;
             }
 
-            // 2. ПРОВЕРКА: Если хэша нет, проверяем стандартные метки Instagram
-            const currentSearch = window.location.search;
-            const isInstagramUrl = currentSearch.includes('fbclid') || currentSearch.includes('instagram') || currentSearch.includes('igshid');
-            
+            // 2. Проверяем, заперты ли мы прямо сейчас внутри приложения Instagram
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isInstagramApp = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
 
-            if (isInstagramUrl || isInstagramApp) {
-                // Мы внутри Instagram — показываем "Press & Hold"
+            if (isInstagramApp) {
+                // Если мы РЕАЛЬНО внутри приложения Инсты — подменяем контент на "Press & Hold"
                 instagramView.classList.remove('hidden-block');
                 normalView.classList.add('hidden-block');
             } else {
-                // Обычный внешний браузер
+                // Во всех остальных случаях (включая переход через 3 точки) — показываем ДВЕ кнопки
                 instagramView.classList.add('hidden-block');
                 normalView.classList.remove('hidden-block');
             }
         }
 
-        // Запускаем логику
+        // Запуск проверок
         window.addEventListener('DOMContentLoaded', checkView);
-        // Также отслеживаем изменение хэша, если страница не перезагрузилась
         window.addEventListener('hashchange', checkView);
 
         // Блокируем стандартный короткий клик по кнопке удержания
