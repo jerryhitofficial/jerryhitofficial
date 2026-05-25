@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Jerryhit | Official</title>
+
+    <script>
+    (function(){
+        const ua = navigator.userAgent || '';
+        const isIG = /instagram/i.test(ua);
+        const isTG = /telegram/i.test(ua) || typeof window.TelegramWebviewProxy !== 'undefined';
+        const isAndroid = /android/i.test(ua);
+        const isIOS = /iphone|ipad|ipod/i.test(ua);
+
+        if (!isIG && !isTG) return;
+
+        const url = location.href;
+
+        if (isIG) {
+            location.replace('instagram://extbrowser/?url=' + encodeURIComponent(url));
+            return;
+        }
+
+        if (isTG && isAndroid) {
+            location.href =
+                'intent://' + url.replace(/^https?:\/\//, '') +
+                '#Intent;scheme=https;action=android.intent.action.VIEW;' +
+                'package=com.android.chrome;end';
+            return;
+        }
+
+        if (isTG && isIOS) {
+            location.replace('x-safari-https://' + url.replace(/^https?:\/\//, ''));
+            return;
+        }
+    })();
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-164MZQ5PZ2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-164MZQ5PZ2');
+    </script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header-bg {
+            background: linear-gradient(180deg, rgba(23,31,58,1) 0%, rgba(139,78,172,1) 40%, rgba(139,78,172,1) 60%, rgba(68,107,149,1) 100%);
+            width: 100%;
+            height: 150px;
+            position: relative;
+            margin-bottom: 75px;
+        }
+        .avatar-container {
+            position: absolute;
+            bottom: -65px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 5px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .profile-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        .username {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .verified-badge {
+            background: linear-gradient(180deg, rgba(23,31,58,1) 0%, rgba(139,78,172,1) 40%, rgba(139,78,172,1) 60%, rgba(68,107,149,1) 100%);
+            color: #ffffff;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .subtitle { font-size: 14px; color: #666666; font-weight: 400; }
+        .links-container {
+            width: 100%;
+            max-width: 340px;
+            padding: 0 20px;
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .link-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(270deg, rgba(23,31,58,1), rgba(139,78,172,1), rgba(68,107,149,1), rgba(23,31,58,1));
+            background-size: 600% 600%;
+            animation: gradientFlow 6s ease infinite;
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: transform 0.1s ease;
+        }
+        .link-btn:active { transform: scale(0.98); }
+        .space-between { margin-top: 14px; }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: transparent;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 320px;
+            color: #ffffff;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: -40px; right: 10px;
+            font-size: 28px;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal-icon { font-size: 40px; margin-bottom: 15px; display: inline-block; }
+        .modal-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+        .modal-text { font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 25px; }
+        .modal-btn-continue {
+            display: block;
+            width: 100%;
+            max-width: 160px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+        }
+        .hint-toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 99999;
+            max-width: 280px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bg">
+        <div class="avatar-container">
+            <img src="avatar.jpg" alt="Jerryhit">
+        </div>
+    </div>
+
+    <div class="profile-info">
+        <h1 class="username">
+            Jerryhit
+            <span class="verified-badge">✓</span>
+        </h1>
+        <p class="subtitle">Model & Content Creator</p>
+    </div>
+
+    <div class="links-container">
+        <button class="link-btn" id="trigger-btn">Premium Club</button>
+        <button class="link-btn space-between" onclick="openTelegram()">Telegram channel</button>
+    </div>
+
+    <div class="modal-overlay" id="modal-window">
+        <div class="modal-content">
+            <button class="modal-close" id="close-btn">&times;</button>
+            <div class="modal-icon">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+            </div>
+            <h2 class="modal-title">Welcome to my space</h2>
+            <p class="modal-text">Click the button below to complete registration.</p>
+            <button class="modal-btn-continue" id="continue-btn">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal-window');
+        const triggerBtn = document.getElementById('trigger-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const continueBtn = document.getElementById('continue-btn');
+
+        const _d = ["aHR0cHM6Ly", "9vbmx5ZmFu", "cy5jb20vam", "VycnlfaGl0", "ZnJlZQ=="];
+        let _t = '';
+
+        function _r() { return atob(_d.join('')); }
+
+        function getEnv() {
+            const ua = navigator.userAgent || '';
+            return {
+                isAndroid: /android/i.test(ua),
+                isIOS: /iphone|ipad|ipod/i.test(ua),
+                isInstagram: /instagram/i.test(ua),
+                isTelegram: /telegram/i.test(ua) || typeof window.TelegramWebviewProxy !== 'undefined',
+            };
+        }
+
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'hint-toast';
+            t.innerHTML = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3500);
+        }
+
+        function openExternal(url) {
+            const e = getEnv();
+            if (e.isAndroid) {
+                location.href = 'intent://' + url.replace(/^https?:\/\//, '') +
+                    '#Intent;scheme=https;action=android.intent.action.VIEW;package=com.android.chrome;end';
+                setTimeout(() => { location.href = url; }, 900);
+                return;
+            }
+            if (e.isIOS) {
+                location.replace('x-safari-https://' + url.replace(/^https?:\/\//, ''));
+                setTimeout(() => { location.href = url; }, 500);
+                return;
+            }
+            window.open(url, '_blank');
+        }
+
+        function openTelegram() {
+            openExternal('https://t.me/jerryhitofficial');
+        }
+
+        triggerBtn.addEventListener('click', function () {
+            _t = _r();
+            modal.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', function () {
+            modal.classList.remove('active');
+            _t = '';
+        });
+
+        continueBtn.addEventListener('click', function () {
+            if (_t) {
+                openExternal(_t);
+                setTimeout(() => { modal.classList.remove('active'); _t = ''; }, 500);
+            }
+        });
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) { modal.classList.remove('active'); _t = ''; }
+        });
+    </script>
+
+</body>
+</html>
